@@ -4,7 +4,13 @@ Skills para um agente (Claude Code, Codex, Antigravity, Cursor…) fazer os inse
 
 Fork de [liamrjohnston/remotion-motion-graphics-skill](https://github.com/liamrjohnston/remotion-motion-graphics-skill) (MIT). Do original ficam o método (intake, gate bloqueante, crítico independente, câmara num só mundo, proibição de glow); sai tudo o que era HTML/CSS e o estilo de promo de SaaS.
 
-![Exemplos](previews/grelha.jpg)
+| Destaque sobre captura | Número-chave |
+|---|---|
+| ![Destaque](previews/destaque.gif) | ![Número](previews/numero.gif) |
+| **Mapa de relações** | **Cronologia** |
+| ![Mapa](previews/mapa.gif) | ![Cronologia](previews/cronologia.gif) |
+
+Todos os exemplos usam dados fictícios e foram renderizados a partir do template, sem uma linha de CSS.
 
 ## As 4 skills
 
