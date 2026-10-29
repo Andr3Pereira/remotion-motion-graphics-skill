@@ -1,0 +1,53 @@
+{
+  "formato": "doc",
+  "fundo": "escuro",
+  "nos": [
+    {
+      "id": "a",
+      "rotulo": "ORGANIZAÇÃO A",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": "x",
+      "rotulo": "EVENTO X",
+      "x": 1300,
+      "y": 0
+    },
+    {
+      "id": "b",
+      "rotulo": "MOVIMENTO B",
+      "x": 650,
+      "y": 400
+    },
+    {
+      "id": "c",
+      "rotulo": "AUTOR C",
+      "x": 650,
+      "y": -400
+    }
+  ],
+  "arestas": [
+    {
+      "de": "a",
+      "para": "x",
+      "tipo": "organizou",
+      "fonte": "Comunicado A (exemplo)",
+      "data": "02/10/2026"
+    },
+    {
+      "de": "b",
+      "para": "x",
+      "tipo": "participou",
+      "fonte": "Agência Exemplo",
+      "data": "05/10/2026"
+    },
+    {
+      "de": "c",
+      "para": "a",
+      "tipo": "inspirou",
+      "fonte": "Entrevista Exemplo",
+      "data": "12/09/2026"
+    }
+  ]
+}

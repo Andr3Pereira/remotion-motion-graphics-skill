@@ -1,0 +1,19 @@
+{
+  "name": "andr3-motion",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "estudio": "remotion studio src/index.ts",
+    "exemplo:pagina": "remotion still src/index.ts PaginaExemplo public/capturas/exemplo.png"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.539",
+    "@remotion/skia": "4.0.539",
+    "@shopify/react-native-skia": "2.14.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-native-web": "0.21.4",
+    "remotion": "4.0.539"
+  },
+  "devDependencies": {"@types/react": "19.3.0", "typescript": "7.0.2"}
+}

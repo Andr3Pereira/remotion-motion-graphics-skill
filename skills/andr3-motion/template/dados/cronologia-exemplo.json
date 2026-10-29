@@ -1,0 +1,9 @@
+{
+  "formato": "doc",
+  "fundo": "escuro",
+  "eventos": [
+    {"data": "2019", "texto": "Primeiro acontecimento de exemplo, sem relação com factos reais.", "fonte": "Fonte Exemplo A, 2019"},
+    {"data": "2022", "texto": "Segundo acontecimento: a lei de exemplo entra em vigor.", "fonte": "Fonte Exemplo B, 2022"},
+    {"data": "2026", "texto": "Hoje: o ponto onde o documentário começa a pergunta.", "fonte": "Fonte Exemplo C, 2026"}
+  ]
+}
