@@ -8,13 +8,13 @@ Testado com Remotion 4.0.539, @shopify/react-native-skia 2.14.0, React 19.3 (29/
 |---|---|
 | `remotion.config.ts` | `enableSkia()` + alias `react-native → react-native-web` |
 | `src/index.ts` | `LoadSkia()` antes do `registerRoot` (carrega o CanvasKit WASM) |
-| `src/lib/tokens.ts` | formatos, paletas, fontes, cores fixas. Única casa das cores |
+| `src/lib/tokens.ts` | perfis (short, longo, dark, hibrido): medidas, cadência, zona segura, área do PiP, cores, fontes. Única casa das cores |
 | `src/lib/fonts.ts` | `useTypefaces()` (espera pelas fontes), `larguraTexto`, `quebrar`, `numeroPT` |
 | `src/lib/media.ts` | `useImagem()` para capturas e logos em Skia |
 | `src/lib/camara.ts` | câmara única: chaves `{f, x, y, z}` em coordenadas do mundo |
 | `src/lib/marcador.ts` | traço de marcador irregular e determinístico |
 | `src/lib/grao.ts` | grão de película em SkSL, neutro |
-| `src/lib/ui.tsx` | `FundoCena`, `Grao`, `CaixaFonte` |
+| `src/lib/ui.tsx` | `Base` (campos comuns), `FundoCena`, `Grao`, `caber` (letra que cabe), `CaixaFonte` (só com `fonteNoEcra`) |
 | `src/comps/*` | Destaque, Numero, Mapa, Cronologia (+ página fictícia de teste) |
 | `dados/*.json` | um JSON por insert; a composição calcula a duração a partir dele |
 
@@ -30,12 +30,13 @@ Testado com Remotion 4.0.539, @shopify/react-native-skia 2.14.0, React 19.3 (29/
 7. **Ordem da transformação:** `[{translateX: vw/2}, {translateY: vh/2}, {scale: z}, {translateX: -x}, {translateY: -y}]` põe o ponto (x, y) do mundo no centro do ecrã com zoom z. Está em `camara()`; não reinventes.
 8. **Marcador por baixo do texto:** desenha-o por cima com `blendMode="multiply"`. O preto fica preto, o papel fica amarelo, como tinta real. Funciona igual sobre capturas.
 9. **Tudo o que é assíncrono** (fontes, imagens) passa por `delayRender`/`continueRender`, senão o render apanha frames vazios.
-10. **`--concurrency`** não pode passar o número de núcleos. Em CPU, o Skia corre a ~1 s por frame com 2 núcleos; no Mac é muito mais rápido. Se estiver lento, experimenta `--gl=angle`.
-11. **`<Sequence>`** cria um div com estilo. Usa `layout="none"` ou, melhor, controla tempos por `frame` dentro do mesmo `<SkiaCanvas>`.
+10. **Desenha-se a 1920×1080 (ou 1080×960) e renderiza-se com `--scale=2`.** O Skia desenha em vetor, por isso o 4K sai nítido. O gate `qa` avisa se o render vier a 1×.
+11. **`--concurrency`** não pode passar o número de núcleos. Em CPU, o Skia corre a ~1 s por frame com 2 núcleos; no Mac é muito mais rápido. Se estiver lento, experimenta `--gl=angle`.
+12. **`<Sequence>`** cria um div com estilo. Usa `layout="none"` ou, melhor, controla tempos por `frame` dentro do mesmo `<SkiaCanvas>`.
 
 ## Juntar uma composição nova
 
-1. Props tipadas + `calculateMetadata` que devolve `FORMATOS[formato]` e a duração calculada dos dados.
-2. Raiz `<SkiaCanvas width height>`; dentro: `FundoCena` → `Group` da câmara → conteúdo → `CaixaFonte` → `Grao`.
+1. Props `Base & {...}` + `calculateMetadata` que devolve `meta(perfil, fps)` e a duração calculada dos dados.
+2. Raiz `<SkiaCanvas width height>`; dentro: `FundoCena` → `Group` da câmara (na zona segura do perfil) → conteúdo → `CaixaFonte` → `Grao`. Medidas de texto em píxeis de ecrã (divide pelo zoom quando o texto vive no mundo).
 3. Regista em `src/Root.tsx` com um JSON de exemplo em `dados/`.
 4. `node <skill>/scripts/andr3-gate.mjs lint .` antes do primeiro render.

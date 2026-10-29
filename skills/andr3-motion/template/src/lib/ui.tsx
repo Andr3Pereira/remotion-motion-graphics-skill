@@ -2,39 +2,54 @@ import {Fill, Group, Rect, Shader, Skia, Text, type SkTypeface} from '@shopify/r
 import {interpolate} from 'remotion';
 import {larguraTexto} from './fonts';
 import {GRAO} from './grao';
-import {FIXAS, type Formato, type Paleta} from './tokens';
+import {FIXAS, PERFIS, type NomePerfil} from './tokens';
 
 export type Fundo = 'escuro' | 'transparente';
 
-// Fundo do insert. "transparente" serve para sobrepor no Final Cut (render em ProRes 4444).
-export const FundoCena = ({fundo, paleta}: {fundo: Fundo; paleta: Paleta}) =>
-  fundo === 'escuro' ? <Fill color={paleta.fundo} /> : null;
+// Campos comuns a todos os inserts.
+export type Base = {
+  perfil: NomePerfil;
+  fundo?: Fundo; // por defeito, o do perfil (longos: transparente para o PiP)
+  fps?: number; // por defeito, o do perfil (25)
+  fonte: string; // "Publicação, DD/MM/AAAA": obrigatória, vai para a lane de fonte do FCP
+  fonteNoEcra?: boolean; // desenhar a caixa de fonte no próprio vídeo (por defeito não: é a lane do FCP)
+};
 
-// Grão neutro de película por cima de tudo. Nunca com cor, nunca com brilho.
-export const Grao = ({frame, fundo, forca = 0.16}: {frame: number; fundo: Fundo; forca?: number}) =>
-  fundo === 'escuro' ? (
+export const fundoDe = (p: Base): Fundo => p.fundo ?? PERFIS[p.perfil].fundoPadrao;
+
+export const FundoCena = ({p}: {p: Base}) => (fundoDe(p) === 'escuro' ? <Fill color={PERFIS[p.perfil].cores.fundo} /> : null);
+
+// Grão neutro de película por cima de tudo. Nunca com cor, nunca com brilho. Só em fundo escuro.
+export const Grao = ({p, frame}: {p: Base; frame: number}) => {
+  const forca = PERFIS[p.perfil].grao;
+  return fundoDe(p) === 'escuro' && forca > 0 ? (
     <Fill blendMode="overlay" opacity={0.55}>
-      <Shader source={GRAO} uniforms={{t: frame, forca}} />
+      <Shader source={GRAO} uniforms={{t: frame, forca: forca * 1.2}} />
     </Fill>
   ) : null;
+};
 
-// Caixa de fonte do Andr3 News: branco sobre caixa escura, sempre no canto inferior esquerdo.
-// Nos Shorts sobe para fora da zona da interface do YouTube (título, botões, legendas).
-export const CaixaFonte = ({texto, ui, paleta, frame, entra, altura, formato}: {
-  texto: string; ui: SkTypeface; paleta: Paleta; frame: number; entra: number; altura: number; formato: Formato;
-}) => {
-  const escala = formato === 'short' ? 1.25 : 1;
+// Tamanho de letra que cabe em "max" px (encolhe, nunca cresce acima de "base").
+export const caber = (tf: SkTypeface, base: number, texto: string, max: number) => {
+  const w = larguraTexto(Skia.Font(tf, 100), texto) / 100;
+  return Math.min(base, max / Math.max(w, 1e-6));
+};
+
+// Caixa de fonte no vídeo: só com fonteNoEcra. Por defeito a fonte vai na lane do FCP.
+// Branco sobre escuro, canto inferior esquerdo da zona segura.
+export const CaixaFonte = ({p, texto, ui, frame, entra}: {p: Base; texto: string; ui: SkTypeface; frame: number; entra: number}) => {
+  if (!p.fonteNoEcra) return null;
+  const perfil = PERFIS[p.perfil];
   const a = interpolate(frame, [entra, entra + 14], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const font = Skia.Font(ui, 30 * escala);
+  const font = Skia.Font(ui, 30);
   const t = `FONTE · ${texto}`;
-  const h = 68 * escala;
-  const x = 64 * escala;
-  const y = formato === 'short' ? altura - 560 : altura - 140;
+  const x = perfil.seguro.x;
+  const y = perfil.seguro.y + perfil.seguro.h - 68;
   return (
     <Group opacity={a} transform={[{translateY: (1 - a) * 16}]}>
-      <Rect x={x} y={y} width={larguraTexto(font, t) + 56 * escala} height={h} color={FIXAS.caixaFonte} />
-      <Rect x={x} y={y} width={6 * escala} height={h} color={paleta.acento} />
-      <Text x={x + 28 * escala} y={y + 45 * escala} text={t} font={font} color={FIXAS.caixaFonteTexto} />
+      <Rect x={x} y={y} width={larguraTexto(font, t) + 56} height={68} color={FIXAS.caixaFonte} />
+      <Rect x={x} y={y} width={6} height={68} color={perfil.cores.acento} />
+      <Text x={x + 28} y={y + 45} text={t} font={font} color={FIXAS.caixaFonteTexto} />
     </Group>
   );
 };

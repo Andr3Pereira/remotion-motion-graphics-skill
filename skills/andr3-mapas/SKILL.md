@@ -12,7 +12,7 @@ Lê primeiro `andr3-motion`. Três composições do template, todas por JSON em 
 Para os 2 a 3 números-chave do doc (os mesmos que levam antecipação sonora). Só números com código C (🟢) no ledger.
 
 ```json
-{"formato": "doc", "fundo": "escuro", "valor": 7.49, "casas": 2, "prefixo": "", "sufixo": " M",
+{"perfil": "dark", "valor": 7.49, "casas": 2, "prefixo": "", "sufixo": " M",
  "rotulo": "utilizadores de YouTube em Portugal", "fonte": "DataReportal, 01/2025"}
 ```
 
@@ -23,8 +23,9 @@ Para os 2 a 3 números-chave do doc (os mesmos que levam antecipação sonora). 
 | **44** | Assenta com um ligeiro recuo de escala | **impacto + `numero()`** |
 | 40 a 58 | Linha de acento por baixo | |
 | 48 a 62 | Rótulo | |
-| 50 | Caixa de fonte | `fonte()` |
+| 50 | (a lane de fonte do FCP já está visível desde o início) | |
 
+- O número ajusta-se à zona segura do perfil (no Short ocupa o painel todo, sem sair dos 320 px de margem).
 - Números à portuguesa (12 121 · 7,49). Arredonda como a voz diz; o valor exato vai no rótulo ou na fonte se for preciso.
 - O rótulo diz o que o número mede, curto. Não repete a frase da narração.
 - Percentagem sem a base é meia verdade: se a base importa, põe-a no rótulo ("23% dos internautas").
@@ -35,7 +36,7 @@ Só **arestas provadas**: código C ou A no ledger, com fonte e data próprias. 
 
 ```json
 {
-  "formato": "doc", "fundo": "escuro",
+  "perfil": "dark",
   "nos": [{"id": "a", "rotulo": "ORGANIZAÇÃO A", "x": 0, "y": 0}, {"id": "x", "rotulo": "EVENTO X", "x": 1300, "y": 0}],
   "arestas": [{"de": "a", "para": "x", "tipo": "organizou", "fonte": "Comunicado A", "data": "02/10/2026"}]
 }
@@ -43,14 +44,14 @@ Só **arestas provadas**: código C ou A no ledger, com fonte e data próprias. 
 
 - Tipos permitidos: `organizou`, `participou`, `apoiou`, `convocou` (linha cheia, acento) e `inspirou` (tracejado, cinzento). Presença, apoio, participação, convocação e organização são coisas diferentes: usa a palavra que a fonte prova, não a mais forte.
 - **Financiamento, comando, controlo:** não há tipo. Só se houver documento, e então pede ao André para aprovar um tipo novo.
-- Coordenadas em espaço do mundo; a câmara enquadra sozinha. Deixa ~1300 px entre nós na horizontal e ~400 na vertical: setas compridas leem-se melhor do que nós apertados.
+- Coordenadas em espaço do mundo; a câmara enquadra sozinha e os tamanhos de letra são de ecrã, por isso o mesmo JSON lê-se num painel de Short e num 16:9 (só muda o `perfil`). Deixa ~1300 px entre nós na horizontal e ~400 na vertical: setas compridas leem-se melhor do que nós apertados.
 - Ordem das arestas = ordem da narração. Cada aresta: 54 frames (linha desenha 22, etiqueta com tipo, fonte e data, caixa de fonte troca).
 - Nomes de pessoas privadas não entram no mapa.
 
 ## Cronologia (`Cronologia`)
 
 ```json
-{"formato": "doc", "fundo": "escuro", "eventos": [{"data": "2019", "texto": "O que aconteceu, numa frase.", "fonte": "Diário da República, 2019"}]}
+{"perfil": "hibrido", "eventos": [{"data": "2019", "texto": "O que aconteceu, numa frase.", "fonte": "Diário da República, 2019"}]}
 ```
 
 - 3 a 6 eventos. Cada um: 60 frames, a câmara viaja da esquerda para a direita e a caixa de fonte acompanha o evento ativo.
@@ -62,8 +63,8 @@ Só **arestas provadas**: código C ou A no ledger, com fonte e data próprias. 
 ```bash
 G=<skill-andr3-motion>/scripts/andr3-gate.mjs
 node $G dados dados/<x>.json && node $G lint .
-npx remotion render src/index.ts <Numero|Mapa|Cronologia> out/<x>.mp4 --props=dados/<x>.json --muted
-node $G qa out/<x>.mp4 --formato doc
+npx remotion render src/index.ts <Numero|Mapa|Cronologia> out/<x>.mp4 --props=dados/<x>.json --scale=2 --muted
+node $G qa out/<x>.mp4 --perfil <perfil>
 ```
 
 O gate `dados` chumba arestas sem fonte ou data, tipos fora da lista, eventos sem fonte e números sem fonte datada.

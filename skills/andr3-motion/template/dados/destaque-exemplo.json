@@ -1,13 +1,30 @@
 {
-  "formato": "doc",
-  "fundo": "escuro",
+  "perfil": "dark",
   "imagem": "capturas/exemplo.png",
   "largura": 1400,
   "altura": 1100,
   "fonte": "Jornal Exemplo (fictício), 29/10/2026",
   "destaques": [
-    {"grupo": 1, "x": 572, "y": 600, "w": 435, "h": 52},
-    {"grupo": 2, "x": 803, "y": 716, "w": 279, "h": 52},
-    {"grupo": 2, "x": 110, "y": 774, "w": 455, "h": 52}
+    {
+      "grupo": 1,
+      "x": 572,
+      "y": 600,
+      "w": 435,
+      "h": 52
+    },
+    {
+      "grupo": 2,
+      "x": 803,
+      "y": 716,
+      "w": 279,
+      "h": 52
+    },
+    {
+      "grupo": 2,
+      "x": 110,
+      "y": 774,
+      "w": 455,
+      "h": 52
+    }
   ]
 }

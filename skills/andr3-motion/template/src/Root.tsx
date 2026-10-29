@@ -8,11 +8,12 @@ import {DestaqueCaptura, metaDestaque, type PropsDestaque} from './comps/Destaqu
 import {MapaRelacoes, metaMapa, type PropsMapa} from './comps/MapaRelacoes';
 import {NumeroChave, metaNumero, type PropsNumero} from './comps/NumeroChave';
 import {PAGINA, PaginaExemplo} from './comps/PaginaExemplo';
-import {FORMATOS} from './lib/tokens';
+import {meta} from './lib/tokens';
 
-// Cada insert é uma composição alimentada por um JSON em dados/. Para um doc novo,
-// copia o JSON, troca os dados (só factos do ledger) e renderiza com --props.
-const base = {...FORMATOS.doc, durationInFrames: 60};
+// Cada insert é uma composição alimentada por um JSON em dados/. O perfil do JSON
+// (short, longo, dark, hibrido) decide dimensões, cadência, fontes e cores.
+// Render: npx remotion render src/index.ts <Comp> out/x.mov --props=dados/x.json --scale=2 ...
+const base = {...meta('dark'), durationInFrames: 60};
 
 export const Root = () => (
   <>

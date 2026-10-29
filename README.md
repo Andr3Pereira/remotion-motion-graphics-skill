@@ -1,16 +1,23 @@
 # Andr3 Motion · inserts em Remotion + Skia, sem CSS
 
-Skills para um agente (Claude Code, Codex, Antigravity, Cursor…) fazer os inserts de motion do **Andr3 News**: destaques sobre capturas reais, números-chave, mapas de relações e cronologias. Tudo desenhado em **Skia** (canvas na GPU), nada de HTML/CSS, para fugir ao visual de "página web animada" e de template de IA.
+Skills para um agente (Claude Code, Codex, Antigravity, Cursor…) fazer os inserts de motion do **Andr3 News**: destaques sobre capturas reais, números-chave, mapas de relações e cronologias, com um perfil por linha de produção (Shorts, longos, docs dark, docs híbridos). Tudo desenhado em **Skia** (canvas na GPU), nada de HTML/CSS, para fugir ao visual de "página web animada" e de template de IA.
 
 Fork de [liamrjohnston/remotion-motion-graphics-skill](https://github.com/liamrjohnston/remotion-motion-graphics-skill) (MIT). Do original ficam o método (intake, gate bloqueante, crítico independente, câmara num só mundo, proibição de glow); sai tudo o que era HTML/CSS e o estilo de promo de SaaS.
 
-| Destaque sobre captura | Número-chave |
-|---|---|
-| ![Destaque](previews/destaque.gif) | ![Número](previews/numero.gif) |
-| **Mapa de relações** | **Cronologia** |
-| ![Mapa](previews/mapa.gif) | ![Cronologia](previews/cronologia.gif) |
+![Os quatro inserts nos quatro perfis](previews/perfis.jpg)
 
 Todos os exemplos usam dados fictícios e foram renderizados a partir do template, sem uma linha de CSS.
+
+## Perfis (um por linha de produção)
+
+| Perfil | Linha | Sai (`--scale=2`) | Fontes | Cores |
+|---|---|---|---|---|
+| `short` | Shorts (`fcp-shorts-noticias`) | painel 2160×1920 | Montserrat Black / SemiBold | `#FFD400`, `#E10600` |
+| `longo` | Longos (`fcp-longos-noticias`) | 3840×2160, PiP com alfa | Montserrat | `#FFD400`, `#E10600` |
+| `dark` | Docs dark (`fcp-doc-motion`) | 3840×2160 | Bebas Neue + Caveat Bold | `#18C8FF`, `#FF2D78` |
+| `hibrido` | Docs híbridos (`_kit_hibrido`) | 3840×2160 | Bebas Neue + Caveat Bold | `#18C8FF`, `#FF2D78` |
+
+25p por defeito (`"fps": 30` nos dados se a câmara estiver a 30p). A fonte de cada insert vai na lane de fonte do Final Cut.
 
 ## As 4 skills
 
@@ -41,8 +48,8 @@ npm run exemplo:pagina                       # captura fictícia de teste
 npx remotion studio src/index.ts             # pré-visualizar
 G=<skill-andr3-motion>/scripts/andr3-gate.mjs
 node $G dados dados/destaque-exemplo.json && node $G lint .
-npx remotion render src/index.ts Destaque out/destaque.mp4 --props=dados/destaque-exemplo.json --muted
-node $G qa out/destaque.mp4 --formato doc
+npx remotion render src/index.ts Destaque out/destaque.mp4 --props=dados/destaque-exemplo.json --scale=2 --muted
+node $G qa out/destaque.mp4 --perfil dark
 ```
 
 ## Sem CSS, a sério

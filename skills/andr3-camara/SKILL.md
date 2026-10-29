@@ -35,7 +35,9 @@ const chaves: Chave[] = [
 - A ação (traço do marcador, número a contar, aresta a desenhar) acontece **na pausa**, nunca durante a viagem.
 - Fim: duas chaves quase iguais, 20 a 30 frames.
 - Mundo com 2 a 2,5 vezes a largura do ecrã. Tudo (capturas, setas, marcadores) no mesmo sistema de coordenadas.
-- Elementos de ecrã (caixa de fonte, grão) ficam **fora** do grupo da câmara.
+- A câmara trabalha dentro de um retângulo do ecrã: a zona segura do perfil (`seguro`) ou o PiP dos longos. Usa `[{translateX: r.x}, {translateY: r.y}, ...camara(frame, chaves, r.w, r.h)]`.
+- Com zoom, prende a câmara às margens do conteúdo (função `prende` no `DestaqueCaptura`): nunca mostrar o vazio além da página.
+- Elementos de ecrã (grão, caixa de fonte quando existe) ficam **fora** do grupo da câmara.
 
 ## Relação com a edição no Final Cut
 

@@ -1,1 +1,9 @@
-{"formato": "doc", "fundo": "escuro", "valor": 12121, "casas": 0, "prefixo": "", "sufixo": "", "rotulo": "visualizações de exemplo", "fonte": "Exemplo (fictício), 29/10/2026"}
+{
+  "perfil": "dark",
+  "valor": 12121,
+  "casas": 0,
+  "prefixo": "",
+  "sufixo": "",
+  "rotulo": "visualizações de exemplo",
+  "fonte": "Exemplo (fictício), 29/10/2026"
+}
